@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import bcrypt from "bcrypt";
 
 
-export default abstract class Security {
+export default abstract class SecurityService {
 
     public static async generateJWT( payload:{}, seed: string, expiresIn?: number ): Promise<string> {
 

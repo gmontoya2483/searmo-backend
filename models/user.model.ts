@@ -1,6 +1,6 @@
-    import mongoose from 'mongoose';
+import mongoose from 'mongoose';
 import jwt from 'jsonwebtoken';
-import Security from "../classes/security.class"
+import SecurityService from "../services/security.service"
 import {JWT_PRIVATE_KEY, JWT_AUTH_EXPIRES_IN} from "../globals/environment.global";
 
 
@@ -41,6 +41,14 @@ const userSchema = new mongoose.Schema({
         value: {type: Boolean, default: false},
         validatedDateTime: {type: Date, default: null}
     },
+    isActive: {
+        type: Boolean,
+        default: true
+    },
+    isAdmin: {
+        type: Boolean,
+        default: true
+    },
     dateTimeCreated: {
         type: Date,
         default: Date.now
@@ -52,7 +60,7 @@ const userSchema = new mongoose.Schema({
 });
 
 userSchema.methods.generateAuthToken = async function () {
-    return Security.generateJWT({_id: this._id},
+    return SecurityService.generateJWT({_id: this._id},
         JWT_PRIVATE_KEY, JWT_AUTH_EXPIRES_IN);
 };
 

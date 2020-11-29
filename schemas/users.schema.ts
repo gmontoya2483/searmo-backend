@@ -10,6 +10,10 @@ export const schemas = {
         // @ts-ignore
         password: passwordComplexity(PASSWORD_COMPLEXITY_OPTIONS).required()
 
+    }),
+    auth: Joi.object().keys({
+        email: Joi.string().min(5).max(255).required().email(),
+        password: Joi.string().required()
     })
 };
 

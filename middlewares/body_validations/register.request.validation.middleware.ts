@@ -1,4 +1,4 @@
-import {NextFunction, Request, Response, Router} from "express";
+import {NextFunction, Request, Response } from "express";
 import { schemas } from '../../schemas/users.schema';
 
 module.exports = function validateUserRegister (req: Request, res: Response, next: NextFunction) {

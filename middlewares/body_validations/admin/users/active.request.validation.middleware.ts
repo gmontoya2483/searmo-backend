@@ -1,5 +1,5 @@
 import {NextFunction, Request, Response, } from "express";
-import { schemas } from '../../schemas/admin.users.schema';
+import { schemas } from '../../../../schemas/admin.users.schema';
 
 module.exports = function validateUserActive (req: Request, res: Response, next: NextFunction) {
     const { error, value } = schemas.active.validate(req.body);

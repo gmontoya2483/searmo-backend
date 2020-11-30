@@ -1,6 +1,6 @@
 export interface IUsersRegister  {
     name: string;
-    last_name: string;
+    lastName: string;
     password: string;
     email: string;
 }
@@ -16,4 +16,18 @@ export interface IValidateUser {
 
 export interface IActiveUser {
     isActive: boolean;
+}
+
+export interface IDeleteUser {
+    isDeleted: boolean;
+}
+
+export interface IAdminUser {
+    isAdmin: boolean;
+}
+
+export interface IUpdateUser {
+    email: string;
+    name: string;
+    lastName: string;
 }

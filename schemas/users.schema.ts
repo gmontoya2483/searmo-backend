@@ -6,7 +6,7 @@ export const schemas = {
     register: Joi.object().keys({
         email: Joi.string().min(5).max(255).required().email(),
         name: Joi.string().min(5).max(255).required(),
-        last_name: Joi.string().min(5).max(255).required(),
+        lastName: Joi.string().min(5).max(255).required(),
         // @ts-ignore
         password: passwordComplexity(PASSWORD_COMPLEXITY_OPTIONS).required()
 

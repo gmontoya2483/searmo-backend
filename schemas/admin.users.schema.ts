@@ -13,5 +13,10 @@ export const schemas = {
     administrator: Joi.object().keys({
         isAdmin: Joi.boolean().required()
     }),
+    update: Joi.object().keys({
+        email: Joi.string().min(5).max(255).required().email(),
+        name: Joi.string().min(5).max(255).required(),
+        lastName: Joi.string().min(5).max(255).required(),
+    }),
 
 };

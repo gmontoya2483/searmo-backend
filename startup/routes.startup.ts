@@ -6,7 +6,6 @@ import error from "../middlewares/error.middleware";
 
 
 // Routes
-import mensajes from "../routes/example.route";
 import users from "../routes/users.route"
 import auth from "../routes/auth.route"
 import register from "../routes/register.route"
@@ -33,7 +32,6 @@ module.exports = function(server: ServerClass){
     server.app.use( cors({origin: true, credentials: true }));
 
     // Routes
-    server.app.use('/api/example', mensajes);
     server.app.use('/api/users', [authValidation, isValidated, isActive],users);
     server.app.use('/api/auth', auth);
     server.app.use('/api/register', register);

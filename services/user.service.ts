@@ -1,12 +1,19 @@
-import {IActiveUser, IAuthenticateUser, IUsersRegister, IValidateUser} from "../Interfaces/users.interface";
+import {
+    IActiveUser, IAdminUser,
+    IAuthenticateUser,
+    IDeleteUser, IUpdateUser,
+    IUsersRegister,
+    IValidateUser
+} from "../Interfaces/users.interface";
 import {User} from "../models/user.model";
 import SecurityService from "./security.service";
 import _ from 'lodash';
+import * as QueryString from "querystring";
 
 
 export default abstract class UserService {
 
-    public static async registerUser ({name, last_name, email, password}: IUsersRegister){
+    public static async registerUser ({name, lastName, email, password}: IUsersRegister){
         // Verificar si el mail ya se encuentra registrado
         let user = await User.findOne({email: email});
         if (user) return {
@@ -19,7 +26,7 @@ export default abstract class UserService {
 
         user = new User({
             name,
-            lastName: last_name,
+            lastName,
             password: hashedPassword,
             email
         });
@@ -35,7 +42,36 @@ export default abstract class UserService {
         };
     }
 
-    public static async getUser (userId: string){
+    public static async updateUser(userId: string, {email, name, lastName}: IUpdateUser){
+        // Verificar que el email no este duplicado
+        const userWithSameEmail = await User.findOne({email: email, _id: {$ne: userId }});
+        if (userWithSameEmail) return {
+            ok: false,
+            message: `email '${email}' ya se encuentra registrado`
+        }
+
+        const user = await  User.findByIdAndUpdate(userId, {
+            $set: {
+                name,
+                email,
+                lastName,
+                dateTimeUpdated: Date.now()
+            }
+
+        }, {new: true}).select({password: 0, __v:0});
+
+        if(!user) return {
+            ok: false,
+            message: "Usuario no encontrado"
+        }
+        return {
+            ok: true,
+            user
+        }
+    }
+
+
+    public static async getSingleUser (userId: string){
         const user = await User.findById(userId).select({password: 0, __v: 0});
         if (!user) return {
             ok: false,
@@ -47,6 +83,29 @@ export default abstract class UserService {
             user
         };
     }
+
+    public static async getAllUsers(search: any) {
+
+        let criteria = {};
+        if (search) {
+            criteria = {
+                $or : [
+                    {name: {$regex:  `.*${search}.*`, $options:'i'}},
+                    {lastName: {$regex: `.*${search}.*`, $options:'i'}},
+                    {email: {$regex: `.*${search}.*`, $options:'i'}}
+                ]
+            }
+        }
+
+        const users = await User.find(criteria).select({password: 0, __v:0});
+        const total = await User.countDocuments(criteria);
+        return {
+            ok: true,
+            total,
+            users
+        }
+    }
+
 
     public static async authenticateUser({email, password}: IAuthenticateUser){
 
@@ -84,7 +143,7 @@ export default abstract class UserService {
                 dateTimeUpdated: Date.now()
             }
 
-        }, {new: true}).select({password: 0});
+        }, {new: true}).select({password: 0, __v:0});
 
         if(!user) return {
             ok: false,
@@ -103,7 +162,7 @@ export default abstract class UserService {
                 dateTimeUpdated: Date.now()
             }
 
-        }, {new: true}).select({password: 0});
+        }, {new: true}).select({password: 0, __v:0});
 
         if(!user) return {
             ok: false,
@@ -114,4 +173,51 @@ export default abstract class UserService {
             user
         }
     }
+
+    public static async setDeleted (userId: string, { isDeleted }: IDeleteUser){
+
+        const deleted = (isDeleted) ? {value: true, validatedDateTime: Date.now()}
+            : {value: false, validatedDateTime: null};
+
+        const isActive = !isDeleted;
+
+        const user = await  User.findByIdAndUpdate(userId, {
+            $set: {
+                isDeleted: deleted,
+                isActive,
+                dateTimeUpdated: Date.now()
+            }
+
+        }, {new: true}).select({password: 0, __v:0});
+
+        if(!user) return {
+            ok: false,
+            message: "Usuario no encontrado"
+        }
+        return {
+            ok: true,
+            user
+        }
+    }
+
+    public static async setAdmin (userId: string, { isAdmin }: IAdminUser){
+        const user = await  User.findByIdAndUpdate(userId, {
+            $set: {
+                isAdmin,
+                dateTimeUpdated: Date.now()
+            }
+
+        }, {new: true}).select({password: 0, __v:0});
+
+        if(!user) return {
+            ok: false,
+            message: "Usuario no encontrado"
+        }
+        return {
+            ok: true,
+            user
+        }
+    }
+
+
 }

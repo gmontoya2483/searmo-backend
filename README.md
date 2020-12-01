@@ -34,7 +34,7 @@ searmo_api_sendGridApiKey=
 searmo_api_sendGridFromEmail=
 ``` 
 
-> **NOTA:** Para desarrollo setear la variable de entorno NODE_ENV=development
+> **NOTA:** Para desarrollo, setear la variable de entorno NODE_ENV=development
 
 
 #### Logger (winston)

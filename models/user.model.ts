@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import jwt from 'jsonwebtoken';
 import SecurityService from "../services/security.service"
 import {JWT_PRIVATE_KEY, JWT_AUTH_EXPIRES_IN} from "../globals/environment.global";
 

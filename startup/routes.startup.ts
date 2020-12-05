@@ -9,7 +9,8 @@ import error from "../middlewares/error.middleware";
 import users from "../routes/users.route"
 import auth from "../routes/auth.route"
 import register from "../routes/register.route"
-import admin from "../routes/admin.users.route"
+import adminUsers from "../routes/admin.users.route"
+import groups from "../routes/groups.route"
 
 // Middlewares
 const authValidation = require('../middlewares/auth.middleware');
@@ -35,7 +36,8 @@ module.exports = function(server: ServerClass){
     server.app.use('/api/users', [authValidation, isValidated, isActive],users);
     server.app.use('/api/auth', auth);
     server.app.use('/api/register', register);
-    server.app.use('/api/admin/users',[authValidation, isValidated, isActive, isAdmin], admin);
+    server.app.use('/api/admin/users',[authValidation, isValidated, isActive, isAdmin], adminUsers);
+    server.app.use('/api/groups', [authValidation, isValidated, isActive],groups);
 
 
     // Error Middleware

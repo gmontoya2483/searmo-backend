@@ -18,9 +18,7 @@ import  {isActive} from '../middlewares/active.middleware';
 import  {isAdmin}  from '../middlewares/admin.middleware';
 import { isAuthenticated } from '../middlewares/auth.middleware';
 import  {isValidated} from '../middlewares/validated.middleware';
-
-
-
+import {isGroupMember} from "../middlewares/group_member.middleware";
 
 
 module.exports = function(server: ServerClass){
@@ -42,7 +40,7 @@ module.exports = function(server: ServerClass){
     server.app.use('/api/admin/users',[isAuthenticated, isValidated, isActive, isAdmin], adminUsers);
     server.app.use('/api/groups', [isAuthenticated, isValidated, isActive],groups);
     server.app.use('/api/groups', [isAuthenticated, isValidated, isActive],groups);
-    server.app.use('/api/groups/:idGroup/members', [isAuthenticated, isValidated, isActive],groupsMembers);
+    server.app.use('/api/groups/:groupId/members', [isAuthenticated, isValidated, isActive, isGroupMember],groupsMembers);
 
 
     // Error Middleware

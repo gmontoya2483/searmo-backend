@@ -2,7 +2,6 @@ import {IDeleteGroup, INewGroup, IUpdateGroup, IServiceResponse} from "../Interf
 import {Group} from "../models/group.model";
 import {GroupMember} from "../models/group_members.model";
 import logger from "../startup/logger.startup";
-import {User} from "../models/user.model";
 
 const mongoose = require('mongoose');
 const Fawn = require('fawn');

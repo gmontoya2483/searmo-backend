@@ -5,11 +5,10 @@ import {
     IUsersRegister,
     IValidateUser,
     IServiceResponse
-} from "../Interfaces/users.interface";
+} from "../Interfaces/users.interfaces";
 import {User} from "../models/user.model";
 import SecurityService from "./security.service";
 import _ from 'lodash';
-import * as QueryString from "querystring";
 
 
 export default abstract class UserService {

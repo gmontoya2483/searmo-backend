@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import SecurityService from "../services/security.service"
-import {JWT_PRIVATE_KEY, JWT_AUTH_EXPIRES_IN} from "../globals/environment.global";
+import {JWT_PRIVATE_KEY, JWT_AUTH_EXPIRES_IN, JWT_NOT_EXPIRES_IN} from "../globals/environment.global";
 
 
 
@@ -33,7 +33,7 @@ const userSchema = new mongoose.Schema({
         maxlength: 1024
     },
     isValidated: {
-        value: {type: Boolean, default: false},
+        value: {type: Boolean, default: true},
         validatedDateTime: {type: Date, default: null}
     },
     isDeleted: {
@@ -62,6 +62,14 @@ userSchema.methods.generateAuthToken = async function () {
     return SecurityService.generateJWT({_id: this._id},
         JWT_PRIVATE_KEY, JWT_AUTH_EXPIRES_IN);
 };
+
+userSchema.methods.generateNotificationToken = async function () {
+
+    // Se carga informacion adicional al payload a fin de renderizar la informacion en frontend cuando este disponible.
+
+    return SecurityService.generateJWT({_id: this._id, name: this.name, lastName: this.lasName, email: this.email},
+        JWT_PRIVATE_KEY, JWT_NOT_EXPIRES_IN);
+}
 
 //User Model Class
 export const User = mongoose.model('User', userSchema);

@@ -14,13 +14,13 @@ export const  isAuthenticated = async function  (req: Request , res: Response, n
         const user = await User.findById(decoded._id).select({password: 0});
         if (!user){
             logger.warn(`JWT Validation: No se encontro el Usuario con id ${decoded._id}`);
-            res.status(400).send({ok: false, message: "Usuario no valido."});
+            return res.status(400).send({ok: false, message: "Usuario no valido."});
         }
 
         // @ts-ignore
         req.user = user;
         next();
     } catch (e) {
-        res.status(401).send({ok: false, message: "token inválido."});
+        return res.status(401).send({ok: false, message: "token inválido."});
     }
 };

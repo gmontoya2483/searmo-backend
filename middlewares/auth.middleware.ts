@@ -4,7 +4,7 @@ import { NextFunction, Request, Response } from "express";
 import {User} from "../models/user.model";
 import logger from "../startup/logger.startup";
 
-module.exports = async function auth  (req: Request , res: Response, next: NextFunction){
+export const  isAuthenticated = async function  (req: Request , res: Response, next: NextFunction){
     const token = req.header('x-auth-token');
     if(!token) return res.status(401).send({ok: false, message: "Acceso denegado. No se recibió el token."});
 
@@ -21,6 +21,6 @@ module.exports = async function auth  (req: Request , res: Response, next: NextF
         req.user = user;
         next();
     } catch (e) {
-        res.status(400).send({ok: false, message: "token inválido."});
+        res.status(401).send({ok: false, message: "token inválido."});
     }
 };

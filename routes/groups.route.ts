@@ -1,39 +1,38 @@
 import {Request, Response, Router} from "express";
 import GroupService from "../services/group.service";
-import UserService from "../services/user.service";
+import {validateNewGroup, validateDeleteGroup, validateUpdateGroup} from '../middlewares/body_validations/group.request.validations.middleware';
 
-const validateNewGroup = require('../middlewares/body_validations/new.group.request.validation.middleware');
 const router = Router();
 
 router.get('/', [], async (req:Request, res: Response)=>{
-
-    return res.json("Lista de gropos");
+    const search = req.query.search || null;
+    const showDeleted  = req.query.showDeleted === 'true';
+    const returnedResponse = await GroupService.getAllGroups(search, showDeleted);
+    return res.status(returnedResponse.status).json(returnedResponse.response);
 });
 
 router.get('/:id', [], async (req:Request, res: Response)=>{
-    return res.json(`Grupo con el id: ${req.params.id}`);
+    const returnedResponse = await GroupService.getSingleGroup(req.params.id);
+    return res.status(returnedResponse.status).json(returnedResponse.response);
 });
 
 
 router.post('/', [validateNewGroup], async (req:Request, res: Response)=>{
     // @ts-ignore
     const returnedResponse = await GroupService.newGroup(req.user._id, req.body);
-    (returnedResponse.ok) ? res.status(201) : res.status(400);
-    res.json(returnedResponse);
+    return res.status(returnedResponse.status).json(returnedResponse.response);
 });
 
-router.put('/:id', [], async (req:Request, res: Response)=>{
-    return res.json(`Modificar grupo con el id: ${req.params.id}`);
+router.put('/:id', [validateUpdateGroup], async (req:Request, res: Response)=>{
+    // @ts-ignore
+    const returnedResponse = await GroupService.updateGroup(req.user._id, req.params.id,req.body);
+    return res.status(returnedResponse.status).json(returnedResponse.response);
 });
 
-router.put('/:id/delete', [], async (req:Request, res: Response)=>{
-    return res.json(`Marcar como borrado el grupo con el id: ${req.params.id}`);
+router.put('/:id/delete', [validateDeleteGroup], async (req:Request, res: Response)=>{
+    // @ts-ignore
+    const returnedResponse = await GroupService.setDeleted(req.user._id, req.params.id,req.body);
+    return res.status(returnedResponse.status).json(returnedResponse.response);
 });
-
-
-
-
-
-
 
 export default router;

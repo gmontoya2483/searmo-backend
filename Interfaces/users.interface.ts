@@ -31,3 +31,15 @@ export interface IUpdateUser {
     name: string;
     lastName: string;
 }
+
+export interface IServiceResponse  {
+    status: number;
+    response: {
+        ok: boolean;
+        message?: string;
+        total?: number;
+        user?: {};
+        users?: {}[];
+        token?: string;
+    };
+}

@@ -1,6 +1,6 @@
 import {NextFunction, Request, Response} from "express";
 
-module.exports =  function admin  (req: Request , res: Response, next: NextFunction){
+export const isAdmin  =  function (req: Request , res: Response, next: NextFunction){
     // @ts-ignore
     if(!req.user){
         return res.status(401).send({ok: false, message: "Acceso denegado. No se verificó el token."});
@@ -8,7 +8,7 @@ module.exports =  function admin  (req: Request , res: Response, next: NextFunct
 
     // @ts-ignore
     if(!req.user.isAdmin){
-        return res.status(401).send({ok: false, message: "Acceso denegado. El usuario no es administrador."});
+        return res.status(403).send({ok: false, message: "Acceso denegado. El usuario no es administrador."});
     }
     next();
 }

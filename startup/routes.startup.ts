@@ -11,12 +11,15 @@ import auth from "../routes/auth.route"
 import register from "../routes/register.route"
 import adminUsers from "../routes/admin.users.route"
 import groups from "../routes/groups.route"
+import groupsMembers from "../routes/groups.members.route"
 
 // Middlewares
-const authValidation = require('../middlewares/auth.middleware');
-const isValidated = require('../middlewares/validated.middleware');
-const isActive = require('../middlewares/active.middleware');
-const isAdmin  = require('../middlewares/admin.middleware');
+import  {isActive} from '../middlewares/active.middleware';
+import  {isAdmin}  from '../middlewares/admin.middleware';
+import { isAuthenticated } from '../middlewares/auth.middleware';
+import  {isValidated} from '../middlewares/validated.middleware';
+
+
 
 
 
@@ -33,11 +36,13 @@ module.exports = function(server: ServerClass){
     server.app.use( cors({origin: true, credentials: true }));
 
     // Routes
-    server.app.use('/api/users', [authValidation, isValidated, isActive],users);
+    server.app.use('/api/users', [isAuthenticated, isValidated, isActive],users);
     server.app.use('/api/auth', auth);
     server.app.use('/api/register', register);
-    server.app.use('/api/admin/users',[authValidation, isValidated, isActive, isAdmin], adminUsers);
-    server.app.use('/api/groups', [authValidation, isValidated, isActive],groups);
+    server.app.use('/api/admin/users',[isAuthenticated, isValidated, isActive, isAdmin], adminUsers);
+    server.app.use('/api/groups', [isAuthenticated, isValidated, isActive],groups);
+    server.app.use('/api/groups', [isAuthenticated, isValidated, isActive],groups);
+    server.app.use('/api/groups/:idGroup/members', [isAuthenticated, isValidated, isActive],groupsMembers);
 
 
     // Error Middleware

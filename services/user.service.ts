@@ -3,7 +3,8 @@ import {
     IAuthenticateUser,
     IDeleteUser, IUpdateUser,
     IUsersRegister,
-    IValidateUser
+    IValidateUser,
+    IServiceResponse
 } from "../Interfaces/users.interface";
 import {User} from "../models/user.model";
 import SecurityService from "./security.service";
@@ -13,12 +14,15 @@ import * as QueryString from "querystring";
 
 export default abstract class UserService {
 
-    public static async registerUser ({name, lastName, email, password}: IUsersRegister){
+    public static async registerUser ({name, lastName, email, password}: IUsersRegister) : Promise<IServiceResponse>{
         // Verificar si el mail ya se encuentra registrado
         let user = await User.findOne({email: email});
         if (user) return {
-            ok: false,
-            message: `email '${email}' ya se encuentra registrado`
+            status: 400,
+            response: {
+                ok: false,
+                message: `email '${email}' ya se encuentra registrado`
+            }
         };
 
         // Hashear el Password
@@ -37,17 +41,24 @@ export default abstract class UserService {
             ['password']);
 
         return {
-            ok: true,
-            user: sanitizedUser
+            status: 201,
+            response: {
+                ok: true,
+                user: sanitizedUser
+            }
         };
     }
 
-    public static async updateUser(userId: string, {email, name, lastName}: IUpdateUser){
+    public static async updateUser(userId: string, {email, name, lastName}: IUpdateUser) : Promise<IServiceResponse>{
         // Verificar que el email no este duplicado
         const userWithSameEmail = await User.findOne({email: email, _id: {$ne: userId }});
         if (userWithSameEmail) return {
-            ok: false,
-            message: `email '${email}' ya se encuentra registrado`
+            status: 400,
+            response: {
+                ok: false,
+                message: `email '${email}' ya se encuentra registrado`
+            }
+
         }
 
         const user = await  User.findByIdAndUpdate(userId, {
@@ -61,32 +72,47 @@ export default abstract class UserService {
         }, {new: true}).select({password: 0, __v:0});
 
         if(!user) return {
-            ok: false,
-            message: "Usuario no encontrado"
-        }
+            status: 400,
+            response: {
+                ok: false,
+                message: "Usuario no encontrado"
+            }
+
+        };
+
         return {
-            ok: true,
-            user
+            status: 200,
+            response: {
+                ok: true,
+                user
+            }
         }
     }
 
 
-    public static async getSingleUser (userId: string){
+    public static async getSingleUser (userId: string) : Promise<IServiceResponse> {
         const user = await User.findById(userId).select({password: 0, __v: 0});
         if (!user) return {
-            ok: false,
-            message: "Usuario no encontrado"
-        }
+            status: 404,
+            response: {
+                ok: false,
+                message: "Usuario no encontrado"
+            }
+        };
 
         return {
-            ok: true,
-            user
+            status: 200,
+            response: {
+                ok: true,
+                user
+            }
         };
     }
 
-    public static async getAllUsers(search: any) {
-
+    public static async getAllUsers(search: any, showDeleted: boolean = false) : Promise<IServiceResponse> {
         let criteria = {};
+
+        // Verificar criterio de Búsqueda
         if (search) {
             criteria = {
                 $or : [
@@ -97,42 +123,62 @@ export default abstract class UserService {
             }
         }
 
-        const users = await User.find(criteria).select({password: 0, __v:0});
-        const total = await User.countDocuments(criteria);
-        return {
-            ok: true,
-            total,
-            users
+        // Verificar si se muestran los marcados como borrados
+        if (!showDeleted){
+            criteria = {
+                ... criteria,
+                'isDeleted.value': false
+            }
         }
+
+        const users = await User.find(criteria).select({password: 0, __v:0});
+        const total = users.length
+        return {
+            status: 200,
+            response: {
+                ok: true,
+                total,
+                users
+            }
+        };
     }
 
 
-    public static async authenticateUser({email, password}: IAuthenticateUser){
+    public static async authenticateUser({email, password}: IAuthenticateUser) : Promise<IServiceResponse>{
 
         let user = await User.findOne({email});
         if (!user) return {
-            ok: false,
-            message: "Email o Password inválidos."
+            status: 400,
+            response: {
+                ok: false,
+                message: "Email o Password inválidos."
+            }
         };
 
         // @ts-ignore
         const validPassword = await SecurityService.validateHash(password, user.password);
         if (!validPassword) return {
-            ok: false,
-            message: "Email o Password inválidos."
+            status: 400,
+            response: {
+                ok: false,
+                message: "Email o Password inválidos."
+            }
         };
 
         // @ts-ignore
         const token = await user.generateAuthToken();
 
         return {
-            ok: true,
-            token
-        }
+            status: 200,
+            response: {
+                ok: true,
+                token
+            }
+        };
     }
 
 
-    public static async setValidated (userId: string, { isValidated }: IValidateUser){
+    public static async setValidated (userId: string, { isValidated }: IValidateUser) : Promise<IServiceResponse> {
 
         const validated = (isValidated) ? {value: true, validatedDateTime: Date.now()}
         : {value: false, validatedDateTime: null};
@@ -146,16 +192,23 @@ export default abstract class UserService {
         }, {new: true}).select({password: 0, __v:0});
 
         if(!user) return {
-            ok: false,
-            message: "Usuario no encontrado"
-        }
+            status: 404,
+            response: {
+                ok: false,
+                message: "Usuario no encontrado"
+            }
+        };
+
         return {
-            ok: true,
-            user
-        }
+            status: 200,
+            response: {
+                ok: true,
+                user
+            }
+        };
     }
 
-    public static async setActivated (userId: string, { isActive }: IActiveUser){
+    public static async setActivated (userId: string, { isActive }: IActiveUser) : Promise<IServiceResponse>{
         const user = await  User.findByIdAndUpdate(userId, {
             $set: {
                 isActive,
@@ -165,16 +218,23 @@ export default abstract class UserService {
         }, {new: true}).select({password: 0, __v:0});
 
         if(!user) return {
-            ok: false,
-            message: "Usuario no encontrado"
-        }
+            status: 404,
+            response: {
+                ok: false,
+                message: "Usuario no encontrado"
+            }
+        };
+
         return {
-            ok: true,
-            user
-        }
+            status: 200,
+            response: {
+                ok: true,
+                user
+            }
+        };
     }
 
-    public static async setDeleted (userId: string, { isDeleted }: IDeleteUser){
+    public static async setDeleted (userId: string, { isDeleted }: IDeleteUser) : Promise<IServiceResponse> {
 
         const deleted = (isDeleted) ? {value: true, validatedDateTime: Date.now()}
             : {value: false, validatedDateTime: null};
@@ -191,16 +251,23 @@ export default abstract class UserService {
         }, {new: true}).select({password: 0, __v:0});
 
         if(!user) return {
-            ok: false,
-            message: "Usuario no encontrado"
-        }
+            status: 404,
+            response: {
+                ok: false,
+                message: "Usuario no encontrado"
+            }
+        };
+
         return {
-            ok: true,
-            user
-        }
+            status: 200,
+            response: {
+                ok: true,
+                user
+            }
+        };
     }
 
-    public static async setAdmin (userId: string, { isAdmin }: IAdminUser){
+    public static async setAdmin (userId: string, { isAdmin }: IAdminUser) : Promise<IServiceResponse> {
         const user = await  User.findByIdAndUpdate(userId, {
             $set: {
                 isAdmin,
@@ -210,13 +277,20 @@ export default abstract class UserService {
         }, {new: true}).select({password: 0, __v:0});
 
         if(!user) return {
-            ok: false,
-            message: "Usuario no encontrado"
-        }
+            status: 404,
+            response: {
+                ok: false,
+                message: "Usuario no encontrado"
+            }
+        };
+
         return {
-            ok: true,
-            user
-        }
+            status: 200,
+            response: {
+                ok: true,
+                user
+            }
+        };
     }
 
 

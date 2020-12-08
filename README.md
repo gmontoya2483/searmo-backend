@@ -1,5 +1,9 @@
 # SeArmoElFulbito- Backen Server
 
+## Descripción
+
+Backend REST API de la aplicación **SeArmoElFulbito**.
+
 ## Recostruir módulos de Node
 ```
 npm install
@@ -38,11 +42,16 @@ searmo_api_sendGridFromEmail=
 
 
 #### Logger (winston)
-* ``searmo_api_log_file`` - Ruta del archivo de logs de express (Default: 'logs/searmo_backend.log')
-* ``searmo_api_log_file_exceptions`` - Ruta del archivo de logs de excepciones (Default: 'logs/searmo_backend_exceptions.log')
-* ``searmo_apilog_general_level`` - Nivel de general de Errores. Salida por consola (Default: 'debug')
-* ``searmo_api_log_file_level`` - Nivel de Errores que se van a guardar en archivo. (Default: 'warn')
-* ``searmo_api_log_file_exceptions_level`` - - Nivel de Error de excepciones que se van a guardar en archivo de log de excepciones. (Default: 'error')
+
+```json5
+"logger": {
+"LOG_FILE": "logs/searmo_backend.log", //Ruta del archivo de logs de express
+"LOG_FILE_EXCEPTIONS": "logs/searmo_backend_exceptions.log", //Ruta del archivo de logs de excepciones
+"LOG_GENERAL_LEVEL": "info", // Nivel de general de Errores. Salida por consola
+"LOG_FILE_LEVEL": "warm", //Nivel de Errores que se van a guardar en archivo
+"LOG_FILE_EXCEPTIONS_LEVEL": "error" //Nivel de Error de excepciones que se van a guardar en archivo de log de excepcione
+},
+```
 
 > **Niveles de error Soportados**
 > * ``error: 0``
@@ -55,4 +64,27 @@ searmo_api_sendGridFromEmail=
 
 > **NOTA:** Los niveles de error se definen el los archivos de configuracion ``config\default.json``
 
+
+### Sendgrid para envio de notificaciones
+
+Para el servicio de notificaciones y envio de mail se utilizó el servicio de Sendgrid de twilio  
+
+[Twilio SendGrid](https://sendgrid.com/)
+
+
+Para habilitar las notificaciones, se debe setear los siguientes parametros dentro del archivo de configuracion:
+
+```json5
+"notification": {
+"NOT_BASE_URL": "http://localhost:3000", // url de base para los link en las notificaciones
+"NOT_AVAILABLE": true // Habilita o deshabilita el envio de notificaciones
+}
+```
+
+> **NOTA:** Al finalizar el frontend, **NOT_BASE_URL** deberia ser enviado a una url del frontend
+
+
+## Postman Project:
+
+Se adjunto dentro de la carpeta ``postman_project``, el archivo para importar el proyecto de Postman.
 

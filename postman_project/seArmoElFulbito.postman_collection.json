@@ -1,0 +1,714 @@
+{
+	"info": {
+		"_postman_id": "301086e8-3156-408b-8be5-1ca568558fdf",
+		"name": "seArmoElFulbito",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "users",
+			"item": [
+				{
+					"name": "users/:id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "{{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/users/5fc3ccbf5cf2a901e4d3e8ab",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users",
+								"5fc3ccbf5cf2a901e4d3e8ab"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "users",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "{{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/users?search=&showDeleted=true",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": ""
+								},
+								{
+									"key": "showDeleted",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "auth",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "2d4d268f-af4b-41af-a1a8-fadc2f4c3d08",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);\r",
+									"tests[\"Access token not empty\"] = jsonData.token !== undefined;\r",
+									"\r",
+									"pm.environment.set(\"jwt_token\", jsonData.token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"\",\r\n    \"password\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/auth",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "admin",
+			"item": [
+				{
+					"name": "users",
+					"item": [
+						{
+							"name": "admin/users/:id",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "x-auth-token",
+										"value": "{{jwt_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"\",\r\n    \"name\": \"\",\r\n    \"lastName\": \"\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/admin/users/5fc44c7dd44cff242cdcbf44",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"admin",
+										"users",
+										"5fc44c7dd44cff242cdcbf44"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "admin/users/:id/validate",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "x-auth-token",
+										"value": "{{jwt_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"isValidated\": true\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/admin/users/5fc3ccbf5cf2a901e4d3e8ab/validate",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"admin",
+										"users",
+										"5fc3ccbf5cf2a901e4d3e8ab",
+										"validate"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "admin/users/:id/active",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "x-auth-token",
+										"type": "text",
+										"value": "{{jwt_token}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"isActive\": false\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/admin/users/5fc3ccbf5cf2a901e4d3e8ab/active",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"admin",
+										"users",
+										"5fc3ccbf5cf2a901e4d3e8ab",
+										"active"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "admin/users/:id/delete",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "x-auth-token",
+										"type": "text",
+										"value": "{{jwt_token}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"isDeleted\": false\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/admin/users/5fc3ccbf5cf2a901e4d3e8ab/delete",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"admin",
+										"users",
+										"5fc3ccbf5cf2a901e4d3e8ab",
+										"delete"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "admin/users/:id/administrator",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "x-auth-token",
+										"type": "text",
+										"value": "{{jwt_token}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"isAdmin\": true\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/admin/users/5fc3ccbf5cf2a901e4d3e8ab/administrator",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"admin",
+										"users",
+										"5fc3ccbf5cf2a901e4d3e8ab",
+										"administrator"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "register",
+			"item": [
+				{
+					"name": "register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"\",\r\n    \"name\": \"\",\r\n    \"lastName\": \"\",\r\n    \"password\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/register",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"register"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "groups",
+			"item": [
+				{
+					"name": "members",
+					"item": [
+						{
+							"name": "groups/:groupId/members/",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-auth-token",
+										"type": "text",
+										"value": "{{jwt_token}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/groups/5fcc198e8d3b760f88a1d3b8/members?showDeleted=true",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"groups",
+										"5fcc198e8d3b760f88a1d3b8",
+										"members"
+									],
+									"query": [
+										{
+											"key": "showDeleted",
+											"value": "true"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "groups/:groupId/members",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "x-auth-token",
+										"type": "text",
+										"value": "{{jwt_token}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"userId\": \"\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/groups/5fcc198e8d3b760f88a1d3b8/members",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"groups",
+										"5fcc198e8d3b760f88a1d3b8",
+										"members"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "groups/:groupId/members/:memberId",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-auth-token",
+										"type": "text",
+										"value": "{{jwt_token}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/groups/5fcc198e8d3b760f88a1d3b8/members/5fc3bf5f5aab8132a8020c3f",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"groups",
+										"5fcc198e8d3b760f88a1d3b8",
+										"members",
+										"5fc3bf5f5aab8132a8020c3f"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "groups/:groupId/members/:memberId/delete",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "x-auth-token",
+										"type": "text",
+										"value": "{{jwt_token}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"isDeleted\": true\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/groups/5fcc198e8d3b760f88a1d3b8/members/5fcd989ae32eec32400b64fc/delete",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"groups",
+										"5fcc198e8d3b760f88a1d3b8",
+										"members",
+										"5fcd989ae32eec32400b64fc",
+										"delete"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "groups",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"type": "text",
+								"value": "{{jwt_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/groups?search=pi&showDeleted=true",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"groups"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "pi"
+								},
+								{
+									"key": "showDeleted",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "groups",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"type": "text",
+								"value": "{{jwt_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"\",\r\n    \"description\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/groups",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"groups"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "groups/:id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"type": "text",
+								"value": "{{jwt_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/groups/5fcd6efce065991fa4456eb4",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"groups",
+								"5fcd6efce065991fa4456eb4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "groups/:id",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"type": "text",
+								"value": "{{jwt_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"\",\r\n    \"description\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/groups/5fcd6efce065991fa4456eb4",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"groups",
+								"5fcd6efce065991fa4456eb4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "groups/:id/delete",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"type": "text",
+								"value": "{{jwt_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"isDeleted\" : true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/groups/5fce2e6b5682cc0eb084d624/delete",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"groups",
+								"5fce2e6b5682cc0eb084d624",
+								"delete"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"protocolProfileBehavior": {}
+}

@@ -14,7 +14,8 @@
     "JWT_NOT_EXPIRES_IN": 172800
   },
   "notification": {
-    "NOT_BASE_URL": "http://localhost:3000/"
+    "NOT_BASE_URL": "http://localhost:3000",
+    "NOT_AVAILABLE": true
   },
   "sendGrid": {
     "SEND_GRID_API_KEY": "",

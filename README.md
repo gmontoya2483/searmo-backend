@@ -38,8 +38,8 @@ searmo_api_sendGridFromEmail=
 
 
 #### Logger (winston)
-* ``searmo_api_log_file`` - Ruta del archivo de logs de express (Default: 'logs/books_backend.log')
-* ``searmo_api_log_file_exceptions`` - Ruta del archivo de logs de excepciones (Default: 'logs/books_backend_exceptions.log')
+* ``searmo_api_log_file`` - Ruta del archivo de logs de express (Default: 'logs/searmo_backend.log')
+* ``searmo_api_log_file_exceptions`` - Ruta del archivo de logs de excepciones (Default: 'logs/searmo_backend_exceptions.log')
 * ``searmo_apilog_general_level`` - Nivel de general de Errores. Salida por consola (Default: 'debug')
 * ``searmo_api_log_file_level`` - Nivel de Errores que se van a guardar en archivo. (Default: 'warn')
 * ``searmo_api_log_file_exceptions_level`` - - Nivel de Error de excepciones que se van a guardar en archivo de log de excepciones. (Default: 'error')

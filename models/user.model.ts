@@ -33,7 +33,7 @@ const userSchema = new mongoose.Schema({
         maxlength: 1024
     },
     isValidated: {
-        value: {type: Boolean, default: true},
+        value: {type: Boolean, default: false},
         validatedDateTime: {type: Date, default: null}
     },
     isDeleted: {
@@ -46,7 +46,7 @@ const userSchema = new mongoose.Schema({
     },
     isAdmin: {
         type: Boolean,
-        default: true
+        default: false
     },
     dateTimeCreated: {
         type: Date,

@@ -15,10 +15,11 @@ export const LOG_FILE_EXCEPTIONS_LEVEL: string = config.get('logger.LOG_FILE_EXC
 // Json WebToken
 export const JWT_PRIVATE_KEY: string = config.get('jwt.JWT_PRIVATE_KEY');
 export const JWT_AUTH_EXPIRES_IN: number = config.get('jwt.JWT_AUTH_EXPIRES_IN');  // 3600 Segundos - 4 hs
-export const JWT_NOT_EXPIRES_IN: number = config.get('jwt.JWT_NOT_EXPIRES_IN');  // Segundos - 2 días
+export const JWT_NOT_EXPIRES_IN: number = config.get('jwt.JWT_NOT_EXPIRES_IN');  // 172800 Segundos - 2 días
 
 //Notification
 export const NOT_BASE_URL: string = config.get('notification.NOT_BASE_URL');
+export const NOT_AVAILABLE: string = config.get('notification.NOT_AVAILABLE');
 
 //SendGrid
 export const SEND_GRID_API_KEY: string = config.get('sendGrid.SEND_GRID_API_KEY');

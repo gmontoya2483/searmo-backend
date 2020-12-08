@@ -9,6 +9,10 @@ import {
 import {User} from "../models/user.model";
 import SecurityService from "./security.service";
 import _ from 'lodash';
+import {NOT_AVAILABLE} from "../globals/environment.global";
+import {Notification} from "./notification.service";
+import {SendGrid} from "./sendgrid.service";
+import logger from "../startup/logger.startup";
 
 
 export default abstract class UserService {
@@ -33,11 +37,29 @@ export default abstract class UserService {
             password: hashedPassword,
             email
         });
+
+
+        // Verifica si las notificaciones estan habilitadas
+        if (NOT_AVAILABLE){
+            // @ts-ignore
+            const token = await user.generateNotificationToken();
+
+            // @ts-ignore
+            const emailMessage = Notification.getValidationEmail(user.name, user.email, token);
+
+            // Enviar Notificacion
+            logger.debug(`Enviando Nofificacion a SendGrid: ${JSON.stringify(emailMessage)}`);
+            const sendGrid = new SendGrid();
+            await sendGrid.sendSingleEmail(emailMessage);
+        }
+
+
         await user.save();
 
         // remover campos no necesarios en la respuesta
         const sanitizedUser = _.omit(user.toObject(),
             ['password']);
+
 
         return {
             status: 201,

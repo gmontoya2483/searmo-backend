@@ -85,6 +85,5 @@ Para habilitar las notificaciones, se debe setear los siguientes parametros dent
 
 
 ## Postman Project:
-
 Se adjunto dentro de la carpeta ``postman_project``, el archivo para importar el proyecto de Postman.
 

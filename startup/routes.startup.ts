@@ -12,6 +12,7 @@ import register from "../routes/register.route"
 import adminUsers from "../routes/admin.users.route"
 import groups from "../routes/groups.route"
 import groupsMembers from "../routes/groups.members.route"
+import groupsMatches from "../routes/group_matches.route"
 
 // Middlewares
 import  {isActive} from '../middlewares/active.middleware';
@@ -41,6 +42,7 @@ module.exports = function(server: ServerClass){
     server.app.use('/api/groups', [isAuthenticated, isValidated, isActive],groups);
     server.app.use('/api/groups', [isAuthenticated, isValidated, isActive],groups);
     server.app.use('/api/groups/:groupId/members', [isAuthenticated, isValidated, isActive, isGroupMember],groupsMembers);
+    server.app.use('/api/groups/:groupId/matches', [isAuthenticated, isValidated, isActive, isGroupMember],groupsMatches)
 
 
     // Error Middleware

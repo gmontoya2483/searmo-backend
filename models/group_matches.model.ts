@@ -1,30 +1,35 @@
 import mongoose, { Schema } from 'mongoose';
-import { User } from "./user.model";
 
-
-const groupMemberSchema = new mongoose.Schema({
+const groupMatchSchema = new mongoose.Schema({
     group: {
         required: true,
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Group'
 
     },
-    user: {
+    title: {
         required: true,
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+        type: String,
+        minlength: 5,
+        maxlength: 255
+    },
+    matchDayTime: {
+        required: true,
+        type: Date
+    },
+    playingField: {
+        required: true,
+        type: String,
+        minlength: 5,
+        maxlength: 255
+    },
+    playersByTeam: {
+      required: true,
+      type: Number
     },
     isDeleted: {
         value: {type: Boolean, default: false},
         validatedDateTime: {type: Date, default: null}
-    },
-    isActive: {
-        type: Boolean,
-        default: true
-    },
-    isAdmin:{
-        type: Boolean,
-        default:false
     },
     dateTimeCreated: {
         type: Date,
@@ -38,4 +43,4 @@ const groupMemberSchema = new mongoose.Schema({
 
 
 //GroupMember Model Class
-export const GroupMember = mongoose.model('GroupMember', groupMemberSchema);
+export const GroupMatch = mongoose.model('GroupMatch', groupMatchSchema);
